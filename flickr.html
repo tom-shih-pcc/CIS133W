@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <title>Comperio Super Simple Image Search</title>
+  </head>
+  <body>
+    Search for <b>cats, dogs, cakes</b>, or anything else that takes your fancy :-)
+    <br />
+    <input id="searchterm" />
+    <button id="search">search</button>
+    
+	<div class="w3-content w3-display-container" id="results">
+		<button onclick="plusDivs(-1)">&#10094;</button>
+		<button onclick="plusDivs(1)">&#10095;</button>
+	</div>
+	
+    <script>
+	  //http://blog.comperiosearch.com/blog/2012/03/14/super-simple-image-search-json-jquery-flickr/
+	  //https://api.flickr.com/services/feeds/photos_public.gne?tagmode=any&format=json&tags=cat
+	  //https://www.w3schools.com/w3css/w3css_slideshow.asp
+	
+      $("#search").click(function(){
+        $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
+        {
+          tags: $("#searchterm").val(),
+          tagmode: "any",
+          format: "json"
+        },
+        function(data) {
+		
+			for(var i=0;(i<(data.items.length )&& i <= 10);i++)
+			{
+				var img = $("<img/>").attr("src", data.items[i].media.m);
+				img.attr("class", "mySlides");	
+				img.attr("style", "display:none;");
+				img.prependTo("#results");
+			}
+			
+			showDivs(1);
+			
+/*		
+			  $.each(data.items, function(i,item){
+				$("<img/>").attr("src", item.media.m).prependTo("#results");
+				if ( i == 10 ) return false;
+			  });
+*/		  
+		  
+        });
+		
+      });
+
+	  
+    </script>
+  </body>
+</html>
+
+<script>
+	var slideIndex = 1;
+
+	function plusDivs(n) {
+	  showDivs(slideIndex += n);
+	}
+
+	function showDivs(n) {
+	  var i;
+	  var x = document.getElementsByClassName("mySlides");
+	  if (n > x.length) {slideIndex = 1}
+	  if (n < 1) {slideIndex = x.length}
+	  for (i = 0; i < x.length; i++) {
+		x[i].style.display = "none";  
+	  }
+	  x[slideIndex-1].style.display = "block";  
+	}
+</script>
